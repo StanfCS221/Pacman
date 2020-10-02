@@ -172,19 +172,16 @@ class MinimaxAgent(MultiAgentSearchAgent):
                 return -1 * float('inf'), Directions.STOP
 
             if turn == 0:
-                # file.write('PLAYER VALUE\n')
                 choices = [(recurse(state.generateSuccessor(0, action), depth - 1, state.getNumAgents() - 1)[0], action)
                            for action in state.getLegalActions(0)]
                 return max(choices)
 
             else:
-                # file.write('GHOST VALUE\n')
                 choices = [(recurse(state.generateSuccessor(turn, action), depth - 1, turn - 1)[0], action) for action
                            in state.getLegalActions(turn)]
                 return min(choices)
 
         value, action = recurse(gameState, self.depth * gameState.getNumAgents(), 0)
-        # file.write('One Iteration FInished\n\n\n')
         # print(value)
 
         #end = timer()
@@ -208,14 +205,11 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         # BEGIN_YOUR_CODE (our solution is 36 lines of code, but don't worry if you deviate from this)
         def recurse(state, depth, turn, alpha, beta):
             if depth == 1:
-                print('Vraceno iz d=1 za turn' + str(turn))
                 return self.evaluationFunction(state), Directions.STOP
             if state.isWin():
-                print('Vraceno iz win za turn' + str(turn))
                 #return float('inf'), Directions.STOP
                 return 999999, Directions.STOP
             if state.isLose():
-                print('Vraceno iz lose za turn' + str(turn))
                 #return -1 * float('inf'), Directions.STOP
                 return -999999, Directions.STOP
 
@@ -223,10 +217,8 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
                 changed = False
                 bestValue = -float('inf')
                 bestAction = Directions.STOP
-                print(len(state.getLegalActions(0)))
                 for action in state.getLegalActions(0):
                     value, _ = recurse(state.generateSuccessor(0,action), depth-1, state.getNumAgents()-1, alpha, beta)
-                    print(value)
                     if bestValue < value:
                         changed = True
                         bestValue = value
@@ -234,11 +226,6 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
                     alpha = max(alpha, bestValue)
                     if beta < alpha:
                         break
-                print('Best value = ' + str(bestValue))
-                print('Broj akcija je: ' + str(len(state.getLegalActions(0))))
-                print('Changed: ' + str(changed))
-                if bestAction == Directions.STOP:
-                    print('Vraceno iz turn0')
                 return bestValue, bestAction
 
             else:
@@ -252,8 +239,6 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
                     beta = min(beta, bestValue)
                     if beta < alpha:
                         break
-                if bestAction == Directions.STOP:
-                    print('Vraceno iz ghost turn' + str(turn))
                 return bestValue, bestAction
 
         value, action = recurse(gameState, self.depth*gameState.getNumAgents(), 0, -1*float('inf'), float('inf'))
@@ -305,8 +290,6 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
                 return sumV, random.choice(actions)
 
         value, action = recurse(gameState, self.depth * gameState.getNumAgents(), 0)
-        # file.write('One Iteration FInished\n\n\n')
-        # print(value)
 
         #end = timer()
         #print('Time needed for move = ' + str(end - start))
